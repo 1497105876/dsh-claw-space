@@ -1,0 +1,53 @@
+{
+  "name": "@gw/dsh-claw-space",
+  "version": "0.2.0",
+  "description": "常驻 OpenClaw 式 workspace for DeepSeek Harness：~/.dsh/openclaw/ 下的 SOUL/IDENTITY/USER/TOOLS/AGENTS/MEMORY/HEARTBEAT/daily 文件族跨会话注入所有 agent，含自由文字注入块、人设切换、/user 会话级多魂绑定与设置页面板。Persistent OpenClaw-style workspace with persona switching, per-session multi-soul binding via /user, free-form inject blocks and a settings panel.",
+  "license": "MIT",
+  "author": "gw",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1497105876/dsh-claw-space.git"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "seed",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh": ">=0.1.2-rc.1"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "dsh-bundle",
+    "openclaw",
+    "persona",
+    "memory",
+    "workspace",
+    "multi-soul"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-settings"
+      ]
+    }
+  }
+}

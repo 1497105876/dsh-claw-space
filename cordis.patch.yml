@@ -1,0 +1,8 @@
+# @gw/dsh-claw-space profile patch layer — one loader entry (host scope).
+#
+# M2 阶段仅 host 半；M3 交付 client 半后 package.json 会补 dsh.client 声明与
+# exports["./client"]。带 client 的包必须真装进 node_modules（file: 真实副本
+# 安装即可），绝对路径挂载会让整站前端 bundle 连坐失败。
+- insert:
+    - id: claw-space
+      name: '@gw/dsh-claw-space'
