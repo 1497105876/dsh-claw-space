@@ -19,6 +19,17 @@ IDENTITY / USER / TOOLS / AGENTS / MEMORY / HEARTBEAT / daily notes 成套文件
 - **HEARTBEAT 门控**：任务清单非空才注入，空文件零开销
 - **daily notes**：每日日志自动取最近 2 篇注入，单篇超长截断
 
+### 自动记忆（会话空闲自动提炼写入）
+
+- **触发**：主会话静默一段时间（默认 60 秒）后自动跑一次；新消息到来即重新计时，`turn/end` 才开始防抖
+- **提炼**：起一个一次性 dsh 子代理，读会话转写本 + 现有 `MEMORY.md` + 今日日志，只回一段 JSON
+- **落盘**：跨天成立的长期事实逐行追加进 `MEMORY.md`，今日流水挂到 `memory/<date>.md` 的「自动记录」小节；**逐行精确去重、只增不删、原子写**
+- **与协议写入并存**：`AGENTS.md` 里「agent 自己写记忆」的协议通道照旧保留，本功能是额外的自动兜底，两者不冲突
+- **只收主会话**：子代理与委派会话的对话不进缓冲（`parentSession` / `delegationDepth` 过滤）；MEMORY 仍仅主会话注入
+- **软降级**：拿不到 `agents` 服务时整体停用并 warn 一次，注入与面板完全不受影响；不进静态 inject
+- **配置**：面板「自动记忆」tab，或手改 `~/.dsh/openclaw/.autowrite.json`（每个决策点 fresh read，改完即生效）
+- **agent 自行决定 git 时机**：本插件只写 Markdown，不碰版本库
+
 ### 人设系统
 
 - **人设库存**：`personas/<名>/` 下保存任意多套 IDENTITY + USER，面板一键切换全局默认
@@ -35,6 +46,7 @@ IDENTITY / USER / TOOLS / AGENTS / MEMORY / HEARTBEAT / daily notes 成套文件
 - **会话绑定清单**：查看所有 `/user` 绑定（sessionId → 人设名），逐条解绑或一键清空（绑定与切换只在对话内用 `/user`，面板不提供切换入口）
 - **文件浏览编辑**：根目录生效文件 + 按人设分组的库存文件，在线编辑保存
 - **文字注入编辑**：`inject.md` 的分块增删改
+- **自动记忆配置**：启用开关 / 空闲秒数 / 转写上下限 / 提炼模型 / 超时，外加实时状态卡（缓冲、上次提炼时间、上次写入条数、最近错误）
 
 ### 其他
 
@@ -75,6 +87,7 @@ desktop profile 由 Electron 桌面端独占管理，请在**桌面端 UI 的插
 ├── MEMORY.md                                  # 全局共享，仅主会话注入
 ├── HEARTBEAT.md                               # 有实际任务才注入
 ├── inject.md                                  # 自由注入块
+├── .autowrite.json                            # 自动记忆配置（只存与默认不同的键，可手改）
 └── memory/*.md                                # daily notes
 ```
 
@@ -103,7 +116,19 @@ desktop profile 由 Electron 桌面端独占管理，请在**桌面端 UI 的插
 | `dailyNoteLimit` | 2 | 注入 daily notes 篇数 |
 | `inject` | true | 注入总开关 |
 | `panelEnabled` | true | 面板开关（无 webServer 自动失效） |
+| `autoWrite` | 见下表 | 自动记忆启动默认值（面板与 `.autowrite.json` 可覆盖，逐项热生效） |
 | `perFileLimits` | 内置默认 | 各文件注入字符上限（SOUL 4000 / IDENTITY 2000 / USER 4000 / TOOLS 4000 / AGENTS 4000 / MEMORY 6000 / daily 每篇 8000） |
+
+`autoWrite` 子项（等价于 `.autowrite.json` 里的键，两者都是可选的）：
+
+| 键 | 默认 | 合法区间 | 说明 |
+|---|---|---|---|
+| `enabled` | true | — | 自动记忆总开关 |
+| `idleMs` | 60000 | 1000..3600000 | 会话空闲多久后跑一次提炼 |
+| `maxTranscriptChars` | 24000 | 4000..200000 | 单次喂给子代理的转写上限（超长截尾保新） |
+| `minTranscriptChars` | 200 | 0..maxTranscriptChars | 转写少于这个长度不跑 |
+| `model` | `""` | ≤200 字符 | 提炼模型；空 = 跟随默认模型选择；可写 `provider/model` |
+| `extractTimeoutMs` | 120000 | 10000..600000 | 提炼硬超时（创建 + 执行共用一条死线） |
 
 ```yaml
 - insert:
