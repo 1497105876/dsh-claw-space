@@ -95,13 +95,13 @@ desktop profile 由 Electron 桌面端独占管理，请在**桌面端 UI 的插
 
 | 文件 | 注入方式 | order | 条件 |
 |---|---|---|---|
-| IDENTITY.md | section `openclaw:identity` | 0 | 总是（AI 的人设）；绑定会话改读库存人设（缺件留空） |
-| USER.md | section `openclaw:user` | 1 | 总是（对用户的描述）；同上 |
-| TOOLS.md | section `openclaw:tools` | 2 | 总是 |
-| AGENTS.md | section `openclaw:agents` | 3 | 总是 |
-| MEMORY.md | context `openclaw:memory` | 70 | 仅主会话 |
+| AGENTS.md | section `openclaw:agents` | 0 | 总是 |
+| MEMORY.md | context `openclaw:memory` | 10 | 仅主会话 |
+| USER.md | section `openclaw:user` | 20 | 总是（对用户的描述）；绑定会话改读库存人设（缺件留空） |
+| IDENTITY.md | section `openclaw:identity` | 30 | 总是（AI 的人设）；同上 |
+| TOOLS.md | section `openclaw:tools` | 40 | 总是 |
+| HEARTBEAT.md | context `openclaw:heartbeat` | 50 | 非空才注入 |
 | memory/*.md | context `openclaw:daily` | 80 | 最近 2 篇 |
-| HEARTBEAT.md | context `openclaw:heartbeat` | 120 | 非空才注入 |
 | inject.md [system] 块 | section `gw-inject:<标题>` | 默认 40 | 块启停控制 |
 | inject.md [context] 块 | context `gw-inject:<标题>` | 默认 125 | 同上 |
 
