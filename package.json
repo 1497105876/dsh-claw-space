@@ -10,6 +10,9 @@
   },
   "type": "module",
   "main": "lib/index.js",
+  "scripts": {
+    "test": "node tests/probe-text-callback.mjs && node tests/smoke-workspace.mjs"
+  },
   "exports": {
     ".": "./lib/index.js",
     "./client": "./lib/client.js",
