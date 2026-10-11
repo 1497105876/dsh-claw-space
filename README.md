@@ -117,7 +117,7 @@ desktop profile 由 Electron 桌面端独占管理，请在**桌面端 UI 的插
 | `inject` | true | 注入总开关 |
 | `panelEnabled` | true | 面板开关（无 webServer 自动失效） |
 | `autoWrite` | 见下表 | 自动记忆启动默认值（面板与 `.autowrite.json` 可覆盖，逐项热生效） |
-| `perFileLimits` | 内置默认 | 各文件注入字符上限（SOUL 4000 / IDENTITY 2000 / USER 4000 / TOOLS 4000 / AGENTS 4000 / MEMORY 6000 / daily 每篇 8000） |
+| `perFileLimits` | 内置默认 | 各文件注入字符上限（IDENTITY 4000 / USER 4000 / TOOLS 4000 / AGENTS 4000 / MEMORY 6000；daily 每篇 8000 为独立常量，不在此配置内） |
 
 `autoWrite` 子项（等价于 `.autowrite.json` 里的键，两者都是可选的）：
 
