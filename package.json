@@ -1,7 +1,7 @@
 {
   "name": "@gw/dsh-claw-space",
   "version": "0.2.0",
-  "description": "常驻 OpenClaw 式 workspace for DeepSeek Harness：~/.dsh/openclaw/ 下的 IDENTITY/USER/TOOLS/AGENTS/MEMORY/HEARTBEAT/daily 文件族跨会话注入所有 agent，含自由文字注入块、人设切换、/user 会话级多魂绑定、会话空闲自动记忆与设置页面板。Persistent OpenClaw-style workspace with persona switching, per-session multi-soul binding via /user, free-form inject blocks, idle auto-memory and a settings panel.",
+  "description": "常驻 OpenClaw 式 workspace for DeepSeek Harness：~/.dsh/openclaw/ 下的 SOUL/IDENTITY/USER/TOOLS/AGENTS/MEMORY/HEARTBEAT/daily 文件族跨会话注入所有 agent，含自由文字注入块、人设切换、/user 会话级多魂绑定与设置页面板。Persistent OpenClaw-style workspace with persona switching, per-session multi-soul binding via /user, free-form inject blocks and a settings panel.",
   "license": "MIT",
   "author": "gw",
   "repository": {
@@ -10,9 +10,6 @@
   },
   "type": "module",
   "main": "lib/index.js",
-  "scripts": {
-    "test": "node tests/probe-text-callback.mjs && node tests/smoke-workspace.mjs"
-  },
   "exports": {
     ".": "./lib/index.js",
     "./client": "./lib/client.js",
