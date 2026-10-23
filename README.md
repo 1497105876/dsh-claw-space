@@ -131,3 +131,28 @@ desktop profile 由 Electron 桌面端独占管理，请在**桌面端 UI 的插
 ## 许可
 
 MIT。
+## Workspace 目录解析（0.3.0 起：按 profile 隔离）
+
+插件在加载时识别当前运行的 profile，识别到就用 **该 profile 专属** 的 workspace 目录，
+各 profile 的 SOUL / IDENTITY / USER / MEMORY / 人设库互不相通：
+
+```
+<home>/profiles/<profile名>/openclaw/
+```
+
+识别优先级（识别到的名字必须对应真实存在的 `<home>/profiles/<名字>` 目录，否则视为未识别）：
+
+1. 插件配置 `dir`（显式指定时优先级最高，行为与 0.2.x 一致）
+2. `DSH_PROFILE` 环境变量（手动指定当前 profile 名）
+3. CLI 启动参数：`dsh --profile web` / `dsh web`（argv 解析，与 dsh CLI 约定一致）
+4. desktop 桌面端的 `desktopProfiles` 服务（桌面内切换 profile 时自动跟随）
+
+未识别到 profile 时回落到全局 `~/.dsh/openclaw`（`$DSH_HOME/openclaw`），与 0.2.x 行为一致。
+配置 `perProfile: false` 可整体关闭隔离（恢复 0.2.x 全局共用）。
+
+### 从 0.2.x 升级
+
+如果某个 profile 之前一直共用全局 `~/.dsh/openclaw`，升级后首次启动会在
+`profiles/<名>/openclaw/` 重新播种全新占位文件。要保留原有数据，请在升级该 profile 的
+插件版本**之前**，把 `~/.dsh/openclaw/` 的内容完整复制到 `<home>/profiles/<名>/openclaw/`
+（只复制、不删除，原目录可留作备份）。
